@@ -43,6 +43,9 @@ our $stateCustomFieldName="State";
 # Lumper will keep the issue keys identical in YT and Jira if YT has no gaps larger than this value
 our $maximumKeyGap=100;
 
+# If you want to set default user for unknown requestors or assignees
+our $defaultJiraUser = "jira_user_account_id"
+
 # Issue type mapping
 our %Type = (
 	'Bug' => 'Bug',
@@ -127,4 +130,11 @@ our %JiraPasswords = (
 	'jdoe' => 'passofjdoe',
 	'bar' => 'passofbar',
 	'onemoreuser' => 'onemorepass'
+);
+
+# Links YouTrack sprint names to their numeric Jira sprint IDs.
+# Add all your other sprint names and their Jira IDs here
+our %SprintMap = (
+	'Sprint 215' => 'jira_sprint_id'
+    
 );
