@@ -6,7 +6,7 @@ use warnings;
 use Data::Dumper;
 
 use display;
-use jira;
+#use jira;
 use youtrack;
 
 my $display;
@@ -35,20 +35,26 @@ our sub passwords {
     my %JiraPasswords = %{$self->{Passwords}};
     my $JiraUrl = $self->{Url};
 
-	$display->printTitle("Checking Passwords");
+    $display->printTitle("Checking Passwords");
 
-	foreach (sort keys %JiraPasswords) {
-		$display->printColumnAligned($_);
-		$display->printColumnAligned("");
-		my $j = jira->new( Url => $JiraUrl, Login => $_, Password => $JiraPasswords{$_} );
-		if ($j) {
-			$display->printColumnAligned("Logged In");
-		} else {
-			$display->printColumnAligned("Error");
-			undef $JiraPasswords{$_};
-		}
-		print "\n";
-	}
+    # Get the correct class name ('jira' or 'Jiracloud') from the main object
+    my $jira_class = ref($jira);
+
+    foreach (sort keys %JiraPasswords) {
+        $display->printColumnAligned($_);
+        $display->printColumnAligned("");
+
+        # Use the dynamic class name to create the temporary object
+        my $j = $jira_class->new( Url => $JiraUrl, Login => $_, Password => $JiraPasswords{$_} );
+
+        if ($j) {
+            $display->printColumnAligned("Logged In");
+        } else {
+            $display->printColumnAligned("Error");
+            undef $JiraPasswords{$_};
+        }
+        print "\n";
+    }
 }
 
 our sub users {
